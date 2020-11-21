@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".TotalProducts" />
         <activity android:name=".TotalOrders"/>
+        <activity android:name=".OrdersDetails"/>
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@ interface ApiClient {
     @GET("home")
     suspend fun getHome(): Response<ApiData>
     @GET("orders/{page}")
-    suspend fun getOrders(@Path("page") page: Int): Response<Data>
+    suspend fun getOrders(@Path("page") page: Int): Response<Orders>
 }
 
 object ApiAdapter {
