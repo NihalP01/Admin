@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.example.admin.Network.ApiAdapter
+import com.example.admin.activity.add_product_ui.AddProductUI
+import kotlinx.android.synthetic.main.dashboard.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,11 +18,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard)
-            val totalOrder = findViewById<CardView>(R.id.totalOrders)
-            totalOrder.setOnClickListener {
+        val totalOrder = findViewById<CardView>(R.id.totalOrders)
+        totalOrder.setOnClickListener {
             val intent = Intent(this, TotalOrders::class.java)
             startActivity(intent)
         }
+
         GlobalScope.launch(Dispatchers.Main) {
             try {
                 val response = ApiAdapter.apiClient.getHome()
@@ -46,8 +49,14 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, "Error Occurred ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Error Occurred ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
+
+        addProductCard?.setOnClickListener {
+            startActivity(Intent(this, AddProductUI::class.java))
+        }
+
     }
 }

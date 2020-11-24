@@ -4,14 +4,18 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
+import com.example.admin.Network.DataClasses.*
+import retrofit2.http.*
 
 interface ApiClient {
+
     @GET("home")
     suspend fun getHome(): Response<ApiData>
     @GET("orders/{page}")
     suspend fun getOrders(@Path("page") page: Int): Response<Orders>
+
+
+
 }
 
 object ApiAdapter {
