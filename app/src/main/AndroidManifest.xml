@@ -31,6 +31,7 @@
         <activity android:name=".TotalOrders" />
         <activity android:name=".OrdersDetails" />
         <activity android:name=".activity.add_product_ui.AddProductUI" />
+        <activity android:name=".activity.categories_ui.CategoriesUI" />
 
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

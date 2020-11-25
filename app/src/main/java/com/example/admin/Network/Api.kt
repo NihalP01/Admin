@@ -20,7 +20,7 @@ interface ApiClient {
 
 object ApiAdapter {
     val apiClient: ApiClient = Retrofit.Builder()
-        .baseUrl("http://13.127.156.146/admin/api/v1/")
+        .baseUrl("http://aiishop.in/admin/api/v1/")
         .addConverterFactory(GsonConverterFactory.create())
         .client(OkHttpClient())
         .build()

@@ -115,5 +115,73 @@ class ApiHandler {
         VolleySingleton.instance?.addToRequestQueue(objectRequest)
     }
 
+    fun sizes() {
+        val arrayRequest = object : JsonArrayRequest(
+            Method.GET,
+            Apis.sizes,
+            null,
+            { apiResponseListener?.onApiResponse(true, RequestType.SIZES, null, it) },
+            { apiResponseListener?.onApiResponse(false, RequestType.SIZES, parseError(it), null) }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return HashMap<String, String>().apply {
+                    this["Accept"] = "application/json"
+                }
+            }
+        }
+        arrayRequest.retryPolicy = defaultRetryPolicy
+        VolleySingleton.instance?.addToRequestQueue(arrayRequest)
+    }
+
+    fun addStock(params: JSONObject) {
+        val objectRequest = object : JsonObjectRequest(
+            Method.POST,
+            Apis.addStock,
+            params,
+            { apiResponseListener?.onApiResponse(true, RequestType.ADD_SIZE, it, null) },
+            {
+                apiResponseListener?.onApiResponse(
+                    false,
+                    RequestType.ADD_SIZE,
+                    parseError(it),
+                    null
+                )
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return HashMap<String, String>().apply {
+                    this["Accept"] = "application/json"
+                }
+            }
+        }
+        objectRequest.retryPolicy = defaultRetryPolicy
+        VolleySingleton.instance?.addToRequestQueue(objectRequest)
+    }
+
+    fun createCategory(params: JSONObject) {
+        val objectRequest = object : JsonObjectRequest(
+            Method.POST,
+            Apis.addCategory,
+            params,
+            { apiResponseListener?.onApiResponse(true, RequestType.ADD_CATEGORY, it, null) },
+            {
+                apiResponseListener?.onApiResponse(
+                    false,
+                    RequestType.ADD_CATEGORY,
+                    parseError(it),
+                    null
+                )
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return HashMap<String, String>().apply {
+                    this["Accept"] = "application/json"
+                    this["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIsImlhdCI6MTYwNjI5MTMzNn0.EJ2qKBieEGCysbcNPSa7nzzq-rh80Su2Eh-KNbmNpV8"
+                }
+            }
+        }
+        objectRequest.retryPolicy = defaultRetryPolicy
+        VolleySingleton.instance?.addToRequestQueue(objectRequest)
+    }
 
 }
