@@ -1,5 +1,6 @@
 package com.example.admin
 
+import UserPrefManager
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -13,8 +14,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+const val auth =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTYwNjQwMzU0Mn0.6VuYV9kEKM_G9y-kYo0yuqcsTocu30xyongBUsCuUBY"
 
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard)
@@ -26,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                val response = ApiAdapter.apiClient.getHome()
+                val response = ApiAdapter.apiClient.getHome(auth)
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()!!
                     data.orders.let {
@@ -44,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@MainActivity,
-                        "Error Occurred! Response not Success. ${response.message()}",
+                        "Error Occurred!. ${response.message()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
