@@ -1,3 +1,5 @@
+package com.example.admin.utils
+
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences

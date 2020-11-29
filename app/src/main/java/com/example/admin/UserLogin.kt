@@ -1,7 +1,7 @@
 package com.example.admin
 
-import Logged
-import UserPrefManager
+import com.example.admin.utils.Logged
+import com.example.admin.utils.UserPrefManager
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast

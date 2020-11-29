@@ -324,6 +324,14 @@
                             />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/card3SaveBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="10dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Next" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </com.google.android.material.card.MaterialCardView>
@@ -341,7 +349,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"

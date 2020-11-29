@@ -20,14 +20,25 @@ class AddProductUIViewModel : ViewModel(), ApiResponseListener {
         var nameList: ArrayList<String>
     )
 
+    data class SizeWithNameList(
+        var sizes: ArrayList<DataClasses.Sizes>,
+        var nameList: ArrayList<String>
+    )
+
     private var _categories = MutableLiveData<CategoryWithNameList>()
     val categories: LiveData<CategoryWithNameList> = _categories
+
+    private var _sizes = MutableLiveData<SizeWithNameList>()
+    val sizes: LiveData<SizeWithNameList> = _sizes
 
     private var _productId = MutableLiveData<Int>()
     val productId: LiveData<Int> = _productId
 
     private var _descAdded = MutableLiveData<Boolean>()
     val descAdded: LiveData<Boolean> = _descAdded
+
+    private var _stockAdded = MutableLiveData<DataClasses.Stock>()
+    val stockAdded: LiveData<DataClasses.Stock> = _stockAdded
 
 
     fun preload() {
@@ -69,6 +80,26 @@ class AddProductUIViewModel : ViewModel(), ApiResponseListener {
             RequestType.PRODUCT_DESC -> {
                 _descAdded.postValue(true)
             }
+            RequestType.SIZES -> {
+                responseArr?.let {
+                    JSONHelper.parseSizes(it).also { l ->
+                        _sizes.postValue(
+                            SizeWithNameList(
+                                l,
+                                JSONHelper.getSizeNameList(l)
+                            )
+                        )
+                    }
+
+                }
+            }
+            RequestType.ADD_SIZE -> {
+                responseObj?.let {
+                    _stockAdded.postValue(
+                        JSONHelper.parseStock(it)
+                    )
+                }
+            }
         }
     }
 
@@ -85,5 +116,20 @@ class AddProductUIViewModel : ViewModel(), ApiResponseListener {
 
     fun saveDesc(productId: Int, params: JSONObject) {
         apiHandler.addProductDesc(productId, params)
+    }
+
+    fun loadSizes() {
+        apiHandler.sizes()
+    }
+
+    fun addStock(
+        productId: Int,
+        stock: String,
+        mrp: String,
+        price: String,
+        discount: String,
+        size: Int
+    ) {
+        apiHandler.addStock(JSONHelper.stockObj(productId, stock, mrp, price, discount, size))
     }
 }
