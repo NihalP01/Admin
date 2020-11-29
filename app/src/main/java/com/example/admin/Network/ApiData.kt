@@ -41,3 +41,8 @@ data class Orderitem(
     val size_id: Int,
     val updated_at: String
 ) : Serializable
+
+data class login(
+    val type: String,
+    val token: String
+) : Serializable

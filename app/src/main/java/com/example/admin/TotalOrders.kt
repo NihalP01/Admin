@@ -19,7 +19,8 @@ class TotalOrders : AppCompatActivity() {
         setContentView(R.layout.total_orders)
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                val response = ApiAdapter.apiClient.getOrders(1)
+                val response = ApiAdapter.apiClient.getOrders("", 1)
+
                 if (response.isSuccessful && response.body() != null) {
                     val ordersRecycler = findViewById<RecyclerView>(R.id.ordersRecycler)
                     val progressBar = findViewById<ProgressBar>(R.id.progressBar)

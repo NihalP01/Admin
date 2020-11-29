@@ -21,12 +21,13 @@
         android:name=".Network.VolleySingleton"
         android:requestLegacyExternalStorage="true"
         >
-        <activity android:name=".MainActivity">
+        <activity android:name=".UserLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"/>
         <activity android:name=".TotalProducts" />
         <activity android:name=".TotalOrders" />
         <activity android:name=".OrdersDetails" />
