@@ -1,9 +1,8 @@
 package com.example.admin
 
-import com.example.admin.utils.Logged
-import com.example.admin.utils.UserPrefManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.admin.Network.ApiAdapter
 import com.example.admin.Storage.TokenDB
+import com.example.admin.utils.Logged
+import com.example.admin.utils.UserPrefManager
 import kotlinx.android.synthetic.main.login_ui.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +27,7 @@ class UserLogin : AppCompatActivity() {
         setContentView(R.layout.login_ui)
 
         userPrefManager = UserPrefManager(applicationContext)
+        observerUser()
 
         btnLogin.setOnClickListener {
             val email = userEmail.text.toString().trim()
@@ -48,21 +50,7 @@ class UserLogin : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         lifecycleScope.launch(Dispatchers.Default) {
                             userPrefManager.setLogged(Logged.IN)
-                            observerUser()
-                            /* var db = Room.databaseBuilder(
-                                applicationContext,
-                                TokenDB::class.java,
-                                "Token DB"
-                            ).build()
-                            val token = TokenEntity()
-                            token.token = response.body()!!.token
-                            db.tokenDao().saveToken(token)
-                            val userToken = db.tokenDao().readToken()
-                            userToken.forEach {
-                                Log.d("myTag", it.token)
-                            }*/
                         }
-                        startActivity(Intent(this@UserLogin, MainActivity::class.java))
                     } else {
                         Toast.makeText(this@UserLogin, response.message(), Toast.LENGTH_SHORT)
                             .show()
@@ -77,13 +65,17 @@ class UserLogin : AppCompatActivity() {
 
     private fun observerUser() {
         userPrefManager.loggedInflow.asLiveData().observe(this, Observer { logged ->
-            when (logged) {
+            when (logged!!) {
                 Logged.IN -> doAfterLoggedIn()
                 Logged.OUT -> doAfterLoggedOut()
             }
         })
     }
 
+    /*override fun onStart() {
+        super.onStart()
+        observerUser()
+    }*/
     private fun doAfterLoggedIn() {
         //startActivity(null)
         GlobalScope.launch {
@@ -91,9 +83,12 @@ class UserLogin : AppCompatActivity() {
                 Room.databaseBuilder(applicationContext, TokenDB::class.java, "Token DB").build()
                     .tokenDao().readToken()
             runOnUiThread {
-                Toast.makeText(this@UserLogin, "Login success total ${i.size}", Toast.LENGTH_LONG)
+                Toast.makeText(this@UserLogin, "Successfully logged in", Toast.LENGTH_LONG)
                     .show()
-                startActivity(Intent(this@UserLogin, MainActivity::class.java)).also {
+                val token = i[0]
+                val intent = Intent(Intent(this@UserLogin, MainActivity::class.java))
+                intent.putExtra("token", token.token)
+                startActivity(intent).also {
                     this@UserLogin.finish()
                 }
             }
@@ -104,5 +99,5 @@ class UserLogin : AppCompatActivity() {
     private fun doAfterLoggedOut() {
 
     }
-}
 
+}
