@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.admin.Network.ApiAdapter
 import com.example.admin.Storage.TokenDB
+import com.example.admin.Storage.TokenEntity
 import com.example.admin.utils.Logged
 import com.example.admin.utils.UserPrefManager
 import kotlinx.android.synthetic.main.login_ui.*
@@ -20,13 +21,18 @@ import kotlinx.coroutines.launch
 
 class UserLogin : AppCompatActivity() {
 
+
     private lateinit var userPrefManager: UserPrefManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_ui)
 
+        val data = Room.databaseBuilder(applicationContext, TokenDB::class.java, "Token DB").build()
+            .tokenDao()
+
         userPrefManager = UserPrefManager(applicationContext)
+
         observerUser()
 
         btnLogin.setOnClickListener {
@@ -50,6 +56,10 @@ class UserLogin : AppCompatActivity() {
                     if (response.isSuccessful && response.body() != null) {
                         lifecycleScope.launch(Dispatchers.Default) {
                             userPrefManager.setLogged(Logged.IN)
+                            val token = TokenEntity()
+                            token.token = response.body()!!.token
+                            data.saveToken(token)
+                            Log.d("log", data.readToken().toString())
                         }
                     } else {
                         Toast.makeText(this@UserLogin, response.message(), Toast.LENGTH_SHORT)
@@ -79,13 +89,13 @@ class UserLogin : AppCompatActivity() {
     private fun doAfterLoggedIn() {
         //startActivity(null)
         GlobalScope.launch {
-            val i =
-                Room.databaseBuilder(applicationContext, TokenDB::class.java, "Token DB").build()
-                    .tokenDao().readToken()
+            val data = Room.databaseBuilder(applicationContext, TokenDB::class.java, "Token DB").build()
+                .tokenDao().readToken()
+
             runOnUiThread {
                 Toast.makeText(this@UserLogin, "Successfully logged in", Toast.LENGTH_LONG)
                     .show()
-                val token = i[0]
+                val token = data[0]
                 val intent = Intent(Intent(this@UserLogin, MainActivity::class.java))
                 intent.putExtra("token", token.token)
                 startActivity(intent).also {

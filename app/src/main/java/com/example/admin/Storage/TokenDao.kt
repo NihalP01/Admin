@@ -3,6 +3,7 @@ package com.example.admin.Storage
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.admin.TotalProducts
 
 @Dao
 interface TokenDao {
